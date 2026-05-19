@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copa 2026 — Engajamento | Update</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-demo-feature="update">
+  <header>
+    <h1>Engajamento na página</h1>
+    <p>POST <code>/api/access-log/update</code> — scroll, tempo, exit_type</p>
+  </header>
+  <nav id="demo-nav"></nav>
+  <main>
+    <div class="card">
+      <span class="badge">Feature: updateAccessLog</span>
+      <h2>Role para baixo e aguarde</h2>
+      <p class="muted">
+        O logger envia updates periódicos (scroll_depth, time_on_page).
+        Use o botão para forçar um update manual.
+      </p>
+      <button type="button" id="btn-force-update" data-testid="force-update">Forçar update agora</button>
+    </div>
+    <div class="spacer" aria-hidden="true"></div>
+    <pre id="output" class="output"></pre>
+  </main>
+  <script src="assets/js/demo-config.js"></script>
+  <script src="assets/js/demo-nav.js"></script>
+  <script>
+    window.DEMO_LOGGER_OVERRIDES = { timeUpdateInterval: 3000 };
+  </script>
+  <script src="assets/js/init-logger.js"></script>
+  <script>
+    document.addEventListener('access-logger-ready', () => {
+      const al = window.accessLogger;
+      document.getElementById('btn-force-update').addEventListener('click', async () => {
+        if (!al.currentLogId) {
+          demoLog('output', 'sem log_id', {});
+          return;
+        }
+        await al.updateAccessLog({
+          scroll_depth: al.maxScrollDepth,
+          time_on_page: Math.floor((Date.now() - al.timeOnPageStart) / 1000),
+          exit_type: 'navigation',
+        });
+        demoLog('output', 'update manual', {
+          log_id: al.currentLogId,
+          scroll_depth: al.maxScrollDepth,
+        });
+      });
+    });
+  </script>
+</body>
+</html>

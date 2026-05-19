@@ -39,6 +39,7 @@ Extraído do sistema de logs do [Meelion](https://www.meelion.com), **sem** feat
 | [docs/EXTRACTION-MEELION-INTEGRATION.md](docs/EXTRACTION-MEELION-INTEGRATION.md) | Integração futura |
 | [docs/DEPLOYMENT-PRODUCTION.md](docs/DEPLOYMENT-PRODUCTION.md) | **Produção: LiteSpeed + PHP + MySQL** |
 | [docs/DOCKER.md](docs/DOCKER.md) | Desenvolvimento local com Docker |
+| [docs/DEMO.md](docs/DEMO.md) | **Demo Copa 2026 + Playwright E2E** |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Fases de implementação |
 
 ---
@@ -49,7 +50,21 @@ Extraído do sistema de logs do [Meelion](https://www.meelion.com), **sem** feat
 - **MySQL 8.0** + PDO (SQL explícito, sem ORM)
 - **Produção:** PHP + MySQL + **LiteSpeed Web Server** (sem Docker) — ver [docs/DEPLOYMENT-PRODUCTION.md](docs/DEPLOYMENT-PRODUCTION.md)
 - **Desenvolvimento:** Docker Compose (opcional) — [docs/DOCKER.md](docs/DOCKER.md)
-- Cliente: **`web/access-logger.js`** (fase 3)
+- Cliente: **`web/access-logger.js`**
+
+---
+
+## Demo e testes E2E
+
+Site de exemplo (Copa 2026) + Playwright cobrindo os 7 endpoints: [docs/DEMO.md](docs/DEMO.md)
+
+```bash
+docker compose up -d
+npm install && npx playwright install chromium
+npm run test:e2e
+```
+
+Demo: http://localhost:8088/demo/world-cup-2026/index.html
 
 ---
 

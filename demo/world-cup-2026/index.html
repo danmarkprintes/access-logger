@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copa 2026 — Início | Access Logger Demo</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-demo-feature="pageview">
+  <header>
+    <h1>Copa do Mundo FIFA 2026</h1>
+    <p>Demo Access Logger — POST <code>/api/access-log</code> (pageview + fingerprint + UTM)</p>
+  </header>
+  <nav id="demo-nav" aria-label="Demo"></nav>
+  <main>
+    <div class="card">
+      <span class="badge">Feature: logAccess</span>
+      <h2>Bem-vindo ao torneio nos EUA, México e Canadá</h2>
+      <p class="muted">
+        Esta página dispara o <strong>AccessLogger</strong> automaticamente ao carregar.
+        A URL inclui parâmetros UTM para o servidor extrair campanha.
+      </p>
+      <p><a class="btn" href="jornada-grupo.html?utm_source=demo&utm_medium=nav&utm_campaign=copa2026">Próximo: fase de grupos →</a></p>
+    </div>
+    <div class="card">
+      <h2>Estado da sessão</h2>
+      <pre id="state" class="output muted">Aguardando AccessLogger…</pre>
+    </div>
+  </main>
+  <script src="assets/js/demo-config.js"></script>
+  <script src="assets/js/demo-nav.js"></script>
+  <script src="assets/js/init-logger.js"></script>
+  <script>
+    document.addEventListener('access-logger-ready', function () {
+      const al = window.accessLogger;
+      const state = document.getElementById('state');
+      const tick = () => {
+        state.textContent = JSON.stringify({
+          session_id: al.sessionId,
+          log_id: al.currentLogId,
+          navigation_order: al.navigationOrder,
+        }, null, 2);
+      };
+      tick();
+      setInterval(tick, 1500);
+    });
+  </script>
+</body>
+</html>

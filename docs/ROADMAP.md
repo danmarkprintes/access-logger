@@ -41,7 +41,9 @@ Fases do projeto **access-logger** (open source). O Meelion **não é alterado**
 - 7 endpoints conforme [API.md](./API.md)
 - `web/access-logger.js` copiado do Meelion
 - PHPUnit: `logAccess`, bot skip, `recordEvents`, update
-- `.github/workflows/phpunit.yml` (opcional)
+- `.github/workflows/phpunit.yml`
+
+**Status:** concluída.
 
 **Critério de pronto:** Playwright ou curl E2E grava pageview + evento no MySQL Docker.
 

@@ -1,0 +1,14 @@
+{
+  "name": "access-logger",
+  "private": true,
+  "description": "E2E Playwright — API + demo Copa 2026",
+  "scripts": {
+    "test:e2e": "playwright test --workers=1",
+    "test:e2e:headed": "playwright test --workers=1 --headed",
+    "test:e2e:api": "playwright test tests/playwright/api-endpoints.spec.ts --workers=1",
+    "test:e2e:demo": "playwright test tests/playwright/demo-world-cup.spec.ts --workers=1 --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.1"
+  }
+}

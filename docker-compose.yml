@@ -26,6 +26,8 @@ services:
       DB_PASS: root
       CORS_ORIGINS: "*"
       APP_DEBUG: "0"
+      RATE_LIMIT_IP: "500"
+      RATE_LIMIT_UA: "500"
     depends_on:
       mysql:
         condition: service_healthy

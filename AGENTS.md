@@ -12,7 +12,7 @@ Microserviço **open source** de telemetria web (fingerprint, pageviews, eventos
 |------|--------|--------------|
 | **1** | Concluída | `docs/`, `docs/sql/schema_core.sql`, `README.md`, `LICENSE` |
 | **2** | Concluída | Slim 4, Docker (`8088`), `/health`, stub `POST /api/access-log` |
-| **3** | Pendente | `AccessLogService` + PDO + `web/access-logger.js` |
+| **3** | Concluída | `AccessLogService`, repositories PDO, 7 endpoints, `web/access-logger.js`, PHPUnit, demo Copa 2026, Playwright E2E |
 | **4** | Pendente | Dashboard relatórios |
 | **5** | Opcional | Integração Meelion (só se o usuário pedir) |
 

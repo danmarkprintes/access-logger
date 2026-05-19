@@ -1,4 +1,9 @@
 /vendor/
+/node_modules/
+/playwright-report/
+/test-results/
+/output/
+/.phpunit.cache/
 /.env
 /config/settings.local.php
 .idea/

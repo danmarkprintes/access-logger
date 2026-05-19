@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copa 2026 — Grupos | Jornada</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-demo-feature="journey">
+  <header>
+    <h1>Fase de grupos</h1>
+    <p>Jornada 1 — mesmo <code>session_id</code>, <code>navigation_order</code> incrementa</p>
+  </header>
+  <nav id="demo-nav"></nav>
+  <main>
+    <div class="card">
+      <span class="badge">Feature: journey (pageview #2)</span>
+      <h2>Grupos A–L</h2>
+      <p class="muted">48 seleções, 12 grupos de 4. Cada navegação gera novo pageview na mesma sessão.</p>
+      <p>
+        <a class="btn" href="jornada-mata.html">Mata-mata →</a>
+        <a class="btn secondary" href="index.html">← Início</a>
+      </p>
+    </div>
+    <pre id="state" class="output"></pre>
+  </main>
+  <script src="assets/js/demo-config.js"></script>
+  <script src="assets/js/demo-nav.js"></script>
+  <script src="assets/js/init-logger.js"></script>
+  <script>
+    document.addEventListener('access-logger-ready', () => {
+      const al = window.accessLogger;
+      document.getElementById('state').textContent = JSON.stringify({
+        session_id: al.sessionId,
+        log_id: al.currentLogId,
+        navigation_order: al.navigationOrder,
+      }, null, 2);
+    });
+  </script>
+</body>
+</html>

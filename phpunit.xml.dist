@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache">
+    <testsuites>
+        <testsuite name="Access Logger">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="DB_DSN" value="mysql:host=127.0.0.1;port=3307;dbname=access_logger;charset=utf8mb4"/>
+        <env name="DB_USER" value="root"/>
+        <env name="DB_PASS" value="root"/>
+    </php>
+</phpunit>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copa 2026 — Painel API</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-demo-feature="api-read">
+  <header>
+    <h1>Painel de consultas</h1>
+    <p>GET stats · journey · fingerprint</p>
+  </header>
+  <nav id="demo-nav"></nav>
+  <main class="grid-2">
+    <div class="card">
+      <span class="badge">GET /stats</span>
+      <h2>Estatísticas</h2>
+      <button type="button" id="btn-stats" data-testid="fetch-stats">Carregar stats</button>
+      <pre id="out-stats" class="output"></pre>
+    </div>
+    <div class="card">
+      <span class="badge">GET /journey</span>
+      <h2>Jornada da sessão</h2>
+      <p class="muted">Usa <code>session_id</code> do sessionStorage do demo.</p>
+      <button type="button" id="btn-journey" data-testid="fetch-journey">Carregar jornada</button>
+      <pre id="out-journey" class="output"></pre>
+    </div>
+    <div class="card">
+      <span class="badge">GET /fingerprint</span>
+      <h2>Fingerprint</h2>
+      <button type="button" id="btn-fingerprint" data-testid="fetch-fingerprint">Carregar fingerprint</button>
+      <pre id="out-fingerprint" class="output"></pre>
+    </div>
+  </main>
+  <script src="assets/js/demo-config.js"></script>
+  <script src="assets/js/demo-nav.js"></script>
+  <script>
+    window.DEMO_LOGGER_OVERRIDES = { autoStart: false };
+  </script>
+  <script src="assets/js/init-logger.js"></script>
+  <script>
+    function sessionKey() {
+      return sessionStorage.getItem('access_logger_session_id');
+    }
+
+    document.getElementById('btn-stats').addEventListener('click', async () => {
+      const res = await demoFetchJson('/api/access-log/stats');
+      demoLog('out-stats', 'stats', res);
+    });
+
+    document.getElementById('btn-journey').addEventListener('click', async () => {
+      const sid = sessionKey();
+      const res = await demoFetchJson('/api/access-log/journey?session_id=' + encodeURIComponent(sid || ''));
+      demoLog('out-journey', 'journey', res);
+    });
+
+    document.getElementById('btn-fingerprint').addEventListener('click', async () => {
+      const sid = sessionKey();
+      if (!sid) {
+        demoLog('out-fingerprint', 'erro', { message: 'navegue pelo demo antes' });
+        return;
+      }
+      const journey = await demoFetchJson('/api/access-log/journey?session_id=' + encodeURIComponent(sid));
+      const fpId = journey.body?.data?.[0]?.user_fingerprint_id;
+      if (!fpId) {
+        demoLog('out-fingerprint', 'erro', { message: 'sem fingerprint na jornada' });
+        return;
+      }
+      const res = await demoFetchJson('/api/access-log/fingerprint?fingerprint_id=' + fpId);
+      demoLog('out-fingerprint', 'fingerprint', res);
+    });
+  </script>
+</body>
+</html>

@@ -6,6 +6,7 @@ namespace AccessLogger\Repository;
 
 use PDO;
 use PDOException;
+use RuntimeException;
 
 final class PdoConnection
 {
@@ -19,29 +20,17 @@ final class PdoConnection
         $pass = $db['pass'] ?? '';
 
         try {
-            $pdo = new PDO($dsn, $user, $pass, [
+            return new PDO($dsn, $user, $pass, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             ]);
         } catch (PDOException $e) {
-            // Health endpoint reports DB status; ingestão fase 2 ainda é stub.
-            $pdo = new PDO('sqlite::memory:');
+            throw new RuntimeException('Database connection failed: ' . $e->getMessage(), 0, $e);
         }
-
-        return $pdo;
-    }
-
-    public static function isMysql(PDO $pdo): bool
-    {
-        return $pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql';
     }
 
     public static function ping(PDO $pdo): bool
     {
-        if (!self::isMysql($pdo)) {
-            return false;
-        }
-
         try {
             $pdo->query('SELECT 1');
 

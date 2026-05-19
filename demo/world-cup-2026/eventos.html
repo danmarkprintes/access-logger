@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copa 2026 — Eventos</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-demo-feature="events">
+  <header>
+    <h1>Interações do torcedor</h1>
+    <p>POST <code>/events</code> (lote) e <code>/event</code> (único)</p>
+  </header>
+  <nav id="demo-nav"></nav>
+  <main>
+    <div class="card">
+      <span class="badge">Feature: recordEvents (batch)</span>
+      <h2>Cliques rastreados</h2>
+      <p class="muted">Cada botão enfileira eventos; flush automático a cada 2s.</p>
+      <button type="button" data-testid="evt-favorito" data-track="button_click" data-label="favoritar_brasil">
+        ⭐ Favoritar Brasil
+      </button>
+      <button type="button" data-testid="evt-ingresso" data-track="button_click" data-label="comprar_ingresso">
+        🎫 Comprar ingresso
+      </button>
+    </div>
+    <div class="card">
+      <span class="badge">Feature: recordSingleAccessLogEvent</span>
+      <h2>Evento único (fetch direto)</h2>
+      <button type="button" id="btn-single-event" data-testid="single-event">Registrar gol ao vivo</button>
+    </div>
+    <pre id="output" class="output"></pre>
+  </main>
+  <script src="assets/js/demo-config.js"></script>
+  <script src="assets/js/demo-nav.js"></script>
+  <script src="assets/js/init-logger.js"></script>
+  <script>
+    document.addEventListener('access-logger-ready', () => {
+      const al = window.accessLogger;
+
+      document.querySelectorAll('[data-track]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          al.enqueueEvent({
+            event_name: btn.dataset.track,
+            element_type: 'button',
+            element_label: btn.dataset.label,
+          });
+          demoLog('output', 'evento enfileirado', { label: btn.dataset.label });
+        });
+      });
+
+      document.getElementById('btn-single-event').addEventListener('click', async () => {
+        if (!al.currentLogId) {
+          demoLog('output', 'erro', { message: 'sem log_id' });
+          return;
+        }
+        const res = await demoFetchJson('/api/access-log/event', {
+          method: 'POST',
+          body: JSON.stringify({
+            access_log_id: al.currentLogId,
+            event: {
+              event_name: 'goal_live',
+              element_type: 'widget',
+              element_label: 'placar_ao_vivo',
+              numeric_value: 1,
+            },
+          }),
+        });
+        demoLog('output', 'POST /event', res);
+      });
+    });
+  </script>
+</body>
+</html>
