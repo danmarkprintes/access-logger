@@ -28,7 +28,7 @@ Extraído do sistema de logs do [Meelion](https://www.meelion.com), **sem** feat
 | Documento | Conteúdo |
 |-----------|----------|
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Fluxos, camadas, diagramas |
-| [docs/API.md](docs/API.md) | Contrato REST (7 endpoints) |
+| [docs/API.md](docs/API.md) | Contrato REST (7 endpoints + `/health`) |
 | [docs/DATABASE.md](docs/DATABASE.md) | Modelo de dados |
 | [docs/sql/schema_core.sql](docs/sql/schema_core.sql) | DDL MySQL |
 | [docs/FRONTEND.md](docs/FRONTEND.md) | Cliente JavaScript |
@@ -54,17 +54,29 @@ Extraído do sistema de logs do [Meelion](https://www.meelion.com), **sem** feat
 
 ---
 
-## Demo e testes E2E
-
-Site de exemplo (Copa 2026) + Playwright cobrindo os 7 endpoints: [docs/DEMO.md](docs/DEMO.md)
+## Testar localmente (Docker, porta 8088)
 
 ```bash
+cd access-logger
 docker compose up -d
-npm install && npx playwright install chromium
-npm run test:e2e
 ```
 
-Demo: http://localhost:8088/demo/world-cup-2026/index.html
+| URL | Descrição |
+|-----|-----------|
+| http://localhost:8088/ | Página inicial com links |
+| http://localhost:8088/health | Health check (HTML no browser) |
+| http://localhost:8088/health?format=json | Health em JSON |
+| http://localhost:8088/demo/world-cup-2026/ | Demo interativo Copa 2026 |
+
+**Testes automatizados:**
+
+```bash
+npm install && npx playwright install chromium
+npm run test:e2e
+docker compose exec php sh -lc "vendor/bin/phpunit"
+```
+
+Detalhes: [docs/DEMO.md](docs/DEMO.md) · [docs/DOCKER.md](docs/DOCKER.md)
 
 ---
 
@@ -74,17 +86,14 @@ Demo: http://localhost:8088/demo/world-cup-2026/index.html
 cd access-logger
 docker compose build
 docker compose up -d
-curl http://localhost:8088/health
+curl.exe http://localhost:8088/health?format=json
 ```
 
-Guia completo: **[docs/DOCKER.md](docs/DOCKER.md)**
+Exemplo de pageview (PowerShell):
 
-Teste do stub de ingestão:
-
-```bash
-curl -s -X POST http://localhost:8088/api/access-log \
-  -H "Content-Type: application/json" \
-  -d "{\"url\":\"https://example.com/\",\"fingerprint\":{\"user_agent\":\"Mozilla/5.0\",\"language\":\"pt-BR\",\"timezone\":\"America/Sao_Paulo\"}}"
+```powershell
+$body = '{"url":"https://example.com/","fingerprint":{"user_agent":"Mozilla/5.0","language":"pt-BR","timezone":"America/Sao_Paulo"}}'
+Invoke-RestMethod -Uri http://localhost:8088/api/access-log -Method POST -ContentType "application/json" -Body $body
 ```
 
 Integração no site:

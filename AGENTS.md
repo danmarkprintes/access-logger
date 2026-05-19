@@ -79,12 +79,14 @@ access-logger/
 │   ├── ROADMAP.md
 │   ├── EXTRACTION-INVENTORY.md
 │   └── sql/schema_core.sql
-├── public/                # (fase 2) index.php Slim
-├── src/                   # (fase 2+) Controller, Service, Repository, Middleware
-├── config/                # (fase 2+) settings.php
-├── web/                   # (fase 3) access-logger.js
-├── tests/                 # (fase 3) PHPUnit
-└── docker-compose.yml     # (fase 2)
+├── public/                # index.php (Slim), index.html (landing), .htaccess
+├── demo/world-cup-2026/   # site estático de exemplo + Playwright browser
+├── src/                   # Controller, Service, Repository, Middleware
+├── config/                # settings.php, load-settings.php
+├── web/                   # access-logger.js
+├── tests/                 # PHPUnit + tests/playwright/
+├── package.json           # Playwright (host)
+└── docker-compose.yml
 ```
 
 ---
@@ -104,7 +106,19 @@ Inventário completo: [docs/EXTRACTION-INVENTORY.md](docs/EXTRACTION-INVENTORY.m
 
 ---
 
-## Ambiente de desenvolvimento (fase 2+)
+## Ambiente de desenvolvimento
+
+### URLs locais (Docker, porta 8088)
+
+| URL | Uso |
+|-----|-----|
+| `/` | Landing `public/index.html` |
+| `/health` | HTML no browser; `?format=json` para monitoramento |
+| `/demo/world-cup-2026/` | Demo Copa 2026 |
+| `/web/access-logger.js` | Cliente JS |
+| `/api/access-log/*` | API REST (ingestão + consultas) |
+
+Ver [docs/DOCKER.md](docs/DOCKER.md) e [docs/DEMO.md](docs/DEMO.md).
 
 ### Docker (stack próprio)
 
@@ -112,7 +126,7 @@ Inventário completo: [docs/EXTRACTION-INVENTORY.md](docs/EXTRACTION-INVENTORY.m
 cd access-logger
 docker compose build
 docker compose up -d
-curl http://localhost:8088/health
+curl.exe http://localhost:8088/health?format=json
 ```
 
 - HTTP: **8088** (não usa porta 80 do Meelion)
@@ -136,8 +150,9 @@ Preferir `docker compose exec` em vez de PHP/Composer no host Windows.
 | `DB_USER` / `DB_PASS` | Credenciais |
 | `CORS_ORIGINS` | Origens permitidas (CSV) |
 | `GEO_BR_ONLY` | `0`/`1` — filtro geo Brasil |
+| `RATE_LIMIT_IP` / `RATE_LIMIT_UA` | Limites/min em `/api/access-log*` (Docker dev: 500) |
 
-`.env` é aceitável **neste** repositório OSS; o Meelion **não** usa `.env`.
+`.env` é aceitável **neste** repositório OSS via `docker-compose.yml`; o Meelion **não** usa `.env`.
 
 ---
 
@@ -179,24 +194,26 @@ Detalhes: [docs/BOT-FILTERING.md](docs/BOT-FILTERING.md), [docs/PRIVACY-LGPD.md]
 
 ## Testes
 
-### Fase 3 (previsto)
+### PHPUnit
 
 ```bash
-docker compose exec php vendor/bin/phpunit
+docker compose exec php sh -lc "cd /var/www/html && vendor/bin/phpunit"
 ```
 
-Casos mínimos:
+### Playwright (host)
 
-- `logAccess` grava fingerprint + access_log
-- User-Agent de bot → `skipped`
-- `recordEvents` com `access_log_id` válido
-- `updateAccessLog` atualiza scroll/tempo
+```bash
+npm install && npx playwright install chromium
+npm run test:e2e          # API (11) + demo browser (5)
+npm run test:e2e:api
+npm run test:e2e:demo
+```
 
-Referência Meelion: `../meelion/tests/TestCase/Service/AccessLogServiceTest.php` (remover testes de gate).
+Base URL: `http://localhost:8088` (`PLAYWRIGHT_BASE_URL` opcional). Ver [docs/DEMO.md](docs/DEMO.md).
 
-### E2E (opcional)
+### Health nos testes
 
-Adaptar padrão de `../meelion/tests/indicadores-financeiros-accesslogger.spec.ts` para a base URL do microserviço.
+`GET /health` com `Accept: */*` (Playwright/curl) → JSON. Browser → HTML.
 
 ---
 
@@ -204,6 +221,8 @@ Adaptar padrão de `../meelion/tests/indicadores-financeiros-accesslogger.spec.t
 
 | Tarefa | Documento |
 |--------|-----------|
+| URLs locais / Docker / troubleshooting | [docs/DOCKER.md](docs/DOCKER.md) |
+| Demo + Playwright | [docs/DEMO.md](docs/DEMO.md) |
 | Novo endpoint ou alterar contrato | [docs/API.md](docs/API.md) |
 | Alterar tabelas/índices | [docs/DATABASE.md](docs/DATABASE.md) + `schema_core.sql` |
 | Scaffold Slim/Docker | [docs/STACK.md](docs/STACK.md) |

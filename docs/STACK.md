@@ -53,37 +53,37 @@ Opcionais:
 
 ---
 
-## Estrutura de pastas (fase 2)
+## Estrutura de pastas (fase 3)
 
 ```
 access-logger/
 ├── public/
-│   └── index.php           # Front controller
+│   ├── index.php           # Front controller Slim
+│   ├── index.html          # Landing local (Docker :8088)
+│   └── .htaccess
+├── demo/world-cup-2026/    # Site de exemplo + testes browser
 ├── src/
-│   ├── App.php             # Bootstrap Slim
+│   ├── App.php
 │   ├── Routes.php
 │   ├── Middleware/
 │   │   ├── CorsMiddleware.php
-│   │   └── RateLimitMiddleware.php
+│   │   ├── RateLimitMiddleware.php
+│   │   └── TrailingSlashMiddleware.php
 │   ├── Controller/
-│   │   └── AccessLogController.php
+│   │   ├── AccessLogController.php
+│   │   └── HealthController.php
 │   ├── Service/
 │   │   └── AccessLogService.php
-│   └── Repository/
-│       ├── PdoConnection.php
-│       ├── FingerprintRepository.php
-│       ├── AccessLogRepository.php
-│       └── AccessLogEventRepository.php
+│   └── Repository/         # PDO, SQL explícito
 ├── config/
-│   └── settings.php        # DB, CORS origins, filtros
-├── web/
-│   └── access-logger.js
-├── docs/
-├── tests/
+├── web/access-logger.js
+├── tests/                  # PHPUnit + playwright/
+├── package.json            # Playwright (host)
 ├── docker-compose.yml
-├── Dockerfile
 └── composer.json
 ```
+
+Rotas públicas úteis em dev: `/health`, `/demo/world-cup-2026/`, `/api/access-log/*`. Ver [DOCKER.md](./DOCKER.md).
 
 ---
 

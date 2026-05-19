@@ -1,11 +1,47 @@
 # Contrato da API REST
 
-Base URL configurável (ex.: `https://logger.example.com`). Todos os endpoints abaixo usam prefixo `/api/access-log`.
+Base URL configurável (ex.: `https://logger.example.com`). Endpoints de telemetria usam prefixo `/api/access-log`.
 
-**Content-Type:** `application/json`  
+**Content-Type (telemetria):** `application/json`  
 **Charset:** UTF-8
 
 Endpoints de **ingestão** são públicos (sem API key). Respostas de erro seguem `{ "success": false, "message": "..." }`.
+
+Códigos HTTP comuns fora da ingestão: **404** (rota inexistente), **405** (método não permitido), **500** (erro interno).
+
+---
+
+## GET `/health`
+
+Verificação de vida do serviço e ligação ao MySQL. **Não** está sob `/api/access-log`.
+
+### Negociação de conteúdo
+
+| Cliente | Resposta |
+|---------|----------|
+| Browser (`Accept: text/html`) | Página HTML legível (status, MySQL, links) |
+| `curl`, monitoramento, Playwright (`Accept: */*` ou vazio) | JSON |
+| Qualquer cliente com `?format=json` | JSON |
+| Qualquer cliente com `?format=html` | HTML |
+
+### Exemplo JSON
+
+```json
+{
+  "ok": true,
+  "service": "access-logger",
+  "phase": 3,
+  "database": "connected",
+  "timestamp": "2026-05-19T20:19:25+00:00"
+}
+```
+
+### URLs locais (Docker)
+
+- HTML: http://localhost:8088/health  
+- JSON: http://localhost:8088/health?format=json  
+
+`/health/` (com barra final) redireciona para `/health` (301).
 
 ---
 

@@ -157,8 +157,11 @@ Pageviews enviados via POST devem chegar sempre ao PHP.
 ### 8. Validação pós-deploy
 
 ```bash
-curl -s https://logger.seudominio.com/health
-# {"ok":true,"database":"connected",...}
+# JSON (monitoramento)
+curl -s "https://logger.seudominio.com/health?format=json"
+# {"ok":true,"database":"connected","phase":3,...}
+
+# Browser: https://logger.seudominio.com/health → página HTML com status
 
 curl -s -X POST https://logger.seudominio.com/api/access-log \
   -H "Content-Type: application/json" \
@@ -205,6 +208,12 @@ No browser (site Meelion ou outro), apontar o JS para `https://logger.seudominio
 - `vendor/` instalado? `composer install` no servidor.
 - Extensão `pdo_mysql` ativa?
 
+### `/health` em branco no browser
+
+- A partir da fase 3+, `/health` devolve **HTML** quando o `Accept` pede `text/html`.
+- Para JSON: `?format=json` ou `curl` sem Accept HTML.
+- Confirme que a rota não está a ser servida por ficheiro estático antigo em `public/health`.
+
 ### `database: unavailable` no `/health`
 
 - Credenciais em `settings.local.php`
@@ -246,7 +255,7 @@ Ver [EXTRACTION-MEELION-INTEGRATION.md](./EXTRACTION-MEELION-INTEGRATION.md).
 - [ ] Virtual host LSWS com **Document Root = `public/`**
 - [ ] Rewrite ativo (`.htaccess` ou regras no painel)
 - [ ] `config/settings.local.php` com DB e CORS
-- [ ] `GET /health` → 200 + `database: connected`
-- [ ] `POST /api/access-log` → JSON de sucesso (stub fase 2; persistência fase 3)
+- [ ] `GET /health` → 200 + `database: connected` (JSON com `?format=json`)
+- [ ] `POST /api/access-log` → `{ "success": true, "log_id": ... }` (persistência real)
 - [ ] Cache LSWS não intercepta POST da API
 - [ ] HTTPS válido no domínio do logger
