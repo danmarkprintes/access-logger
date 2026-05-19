@@ -245,10 +245,19 @@ Base URL: `http://localhost:8088` (`PLAYWRIGHT_BASE_URL` opcional). Ver [docs/DE
 
 | Branch | Uso |
 |--------|-----|
-| **`dev`** | Desenvolvimento diário (branch de trabalho ativa) |
-| **`main`** | Produção — só merge quando estiver pronto para release |
+| **`dev`** | Integração — recebe PRs de feature branches |
+| **`main`** | Produção — só merge via PR aprovado a partir de `dev` |
 
-Fluxo: commitar em `dev` → PR `dev` → `main` para deploy.
+**Proteção no GitHub (ruleset ativo):** push direto em `main` e `dev` é **bloqueado**. Só entra código via **Pull Request** com **1 aprovação**.
+
+Fluxo recomendado:
+
+1. `git checkout -b feature/minha-mudanca` (a partir de `dev`)
+2. Commit + `git push -u origin feature/minha-mudanca`
+3. Abrir PR → `dev` → você aprova e faz merge
+4. Quando for release: PR `dev` → `main` → aprovar e merge
+
+Configuração versionada: [.github/ruleset-protect-branches.json](.github/ruleset-protect-branches.json) (referência; a regra vive no GitHub em **Settings → Rules → Rulesets**).
 
 ## Git e PRs
 
