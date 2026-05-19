@@ -241,6 +241,15 @@ Base URL: `http://localhost:8088` (`PLAYWRIGHT_BASE_URL` opcional). Ver [docs/DE
 
 ---
 
+## Git e branches
+
+| Branch | Uso |
+|--------|-----|
+| **`dev`** | Desenvolvimento diário (branch de trabalho ativa) |
+| **`main`** | Produção — só merge quando estiver pronto para release |
+
+Fluxo: commitar em `dev` → PR `dev` → `main` para deploy.
+
 ## Git e PRs
 
 - **Não commitar** `vendor/`, `.env` local, artefatos de teste.
