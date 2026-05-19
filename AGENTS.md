@@ -248,9 +248,11 @@ Base URL: `http://localhost:8088` (`PLAYWRIGHT_BASE_URL` opcional). Ver [docs/DE
 | **`dev`** | Integração — recebe PRs de feature branches |
 | **`main`** | Produção — só merge via PR aprovado a partir de `dev` |
 
-**Proteção no GitHub (ruleset ativo):** push direto em `main` e `dev` é **bloqueado**. Só entra código via **Pull Request** com **1 aprovação**.
+**Proteção no GitHub (ruleset ativo):** push direto em `main` e `dev` é **bloqueado** para outros usuários. O owner (`danmarkprintes`) tem **bypass** e pode fazer push direto.
 
-Fluxo recomendado:
+Colaboradores futuros: só via **Pull Request** com **1 aprovação**.
+
+Fluxo recomendado (colaboradores ou quando quiser revisar):
 
 1. `git checkout -b feature/minha-mudanca` (a partir de `dev`)
 2. Commit + `git push -u origin feature/minha-mudanca`

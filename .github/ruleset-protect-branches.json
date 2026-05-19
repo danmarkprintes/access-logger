@@ -28,5 +28,11 @@
       "parameters": {}
     }
   ],
-  "bypass_actors": []
+  "bypass_actors": [
+    {
+      "actor_id": 200171168,
+      "actor_type": "User",
+      "bypass_mode": "always"
+    }
+  ]
 }
