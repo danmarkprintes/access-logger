@@ -23,7 +23,7 @@ final class HealthController
         $payload = [
             'ok' => true,
             'service' => 'access-logger',
-            'phase' => 2,
+            'phase' => 3,
             'database' => $dbOk ? 'connected' : 'unavailable',
         ];
 

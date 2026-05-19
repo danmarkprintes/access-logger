@@ -7,9 +7,16 @@ Site estático de exemplo que exercita cada recurso do Access Logger, com suíte
 1. Docker do access-logger em execução (`docker compose up -d`)
 2. Node.js 18+ na máquina host
 
-## Abrir o demo no browser
+## Abrir no browser
 
-**URL:** [http://localhost:8088/demo/world-cup-2026/index.html](http://localhost:8088/demo/world-cup-2026/index.html)
+| URL | O quê |
+|-----|--------|
+| http://localhost:8088/ | Página inicial com links |
+| http://localhost:8088/health | Health check (JSON) |
+| http://localhost:8088/demo/world-cup-2026/ | **Demo Copa 2026** |
+
+> Use **sem barra extra** em `/health` ou deixe o redirect automático (`/health/` → `/health`).
+> `GET /api/access-log` no browser retorna **405** (só aceita POST) — isso é esperado.
 
 | Página | Feature exercitada |
 |--------|-------------------|

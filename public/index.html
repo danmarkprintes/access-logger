@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Access Logger</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; }
+    h1 { font-size: 1.5rem; }
+    ul { padding-left: 1.2rem; }
+    a { color: #0066cc; }
+    code { background: #f0f0f0; padding: 0.1rem 0.35rem; border-radius: 4px; }
+    .ok { color: #0a7a2f; }
+  </style>
+</head>
+<body>
+  <h1>Access Logger</h1>
+  <p>Microserviço de telemetria web (Slim 4 + MySQL). Ambiente local Docker na porta <strong>8088</strong>.</p>
+
+  <h2>Comece aqui</h2>
+  <ul>
+    <li><a href="/demo/world-cup-2026/">Demo interativo — Copa do Mundo 2026</a></li>
+    <li><a href="/health">Health check</a> (<code>GET /health</code> — JSON)</li>
+  </ul>
+
+  <h2>API (JSON)</h2>
+  <ul>
+    <li><code>POST /api/access-log</code> — pageview</li>
+    <li><code>POST /api/access-log/update</code> — engajamento</li>
+    <li><code>POST /api/access-log/events</code> — eventos em lote</li>
+    <li><code>POST /api/access-log/event</code> — evento único</li>
+    <li><a href="/api/access-log/stats">GET /api/access-log/stats</a></li>
+    <li><a href="/api/access-log/journey?session_id=exemplo">GET /api/access-log/journey</a> (troque <code>session_id</code>)</li>
+  </ul>
+
+  <p class="ok">Se esta página abriu, o nginx está OK. O demo usa o mesmo host; a API responde nos paths acima.</p>
+</body>
+</html>
