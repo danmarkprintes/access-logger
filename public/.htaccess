@@ -1,0 +1,18 @@
+# LiteSpeed Web Server / Apache — front controller (Slim 4)
+# Document root do virtual host DEVE ser esta pasta (public/).
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Se a app estiver num subpath (ex.: https://dominio.com/logger/), descomente e ajuste:
+    # RewriteBase /logger
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# Bloquear acesso a ficheiros ocultos
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

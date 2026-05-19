@@ -1,0 +1,8 @@
+# Segurança: se o docroot do LSWS apontar por engano para a raiz do projeto,
+# redireciona pedidos HTTP para public/ (preferir docroot = public/ no painel).
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^$ public/ [L]
+    RewriteRule ^((?!public/).*)$ public/$1 [L]
+</IfModule>

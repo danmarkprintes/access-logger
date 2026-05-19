@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Copie para settings.local.php (não versionar) no servidor de produção.
+ * LiteSpeed + PHP: credenciais MySQL e CORS do site que embute o JS.
+ */
+return [
+    'display_error_details' => false,
+    'db' => [
+        'dsn' => 'mysql:host=127.0.0.1;dbname=access_logger;charset=utf8mb4',
+        'user' => 'access_logger_user',
+        'pass' => 'ALTERE_A_SENHA',
+    ],
+    'cors' => [
+        'allowed_origins' => [
+            'https://www.meelion.com',
+            'https://meelion.com',
+        ],
+    ],
+    'rate_limit' => [
+        'storage_path' => '/tmp/access-logger-rl',
+    ],
+    'filters' => [
+        'geo_brazil_only' => false,
+        'filtered_hosts' => [],
+    ],
+];
